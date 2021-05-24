@@ -1,4 +1,4 @@
-# fluttermap
+# MAPFLUTTER-Study
 
 A new Flutter project.
 
