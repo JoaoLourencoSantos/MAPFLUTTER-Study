@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 void main() {
@@ -29,21 +30,36 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   late GoogleMapController mapController;
+  var geolocator = Geolocator();
+
   static final LatLng _locationCenter =
       LatLng(-19.932532517135538, -43.938577202118765);
-
-  static final CameraPosition _cameraPosition =
-      CameraPosition(target: _locationCenter, zoom: 15.0, tilt: 0, bearing: 0);
 
   void _onMapCreated(GoogleMapController controller) async {
     mapController = controller;
 
     mapController.setMapStyle(
         await DefaultAssetBundle.of(context).loadString('assets/map.json'));
+
+    mapController.animateCamera(
+        CameraUpdate.newCameraPosition(await _getCurrentPosition()));
+  }
+
+  Future<Position> _getPosition() async {
+    return await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+  }
+
+  Future<CameraPosition> _getCurrentPosition() async {
+    Position position = await _getPosition();
+
+    return CameraPosition(
+        target: LatLng(position.latitude, position.longitude), zoom: 15.0);
   }
 
   CameraPosition _getInitialLocation() {
-    return _cameraPosition;
+    return CameraPosition(
+        target: _locationCenter, zoom: 15.0, tilt: 0, bearing: 0);
   }
 
   Set<Marker> _createMarkers() {
@@ -81,6 +97,8 @@ class _MyHomePageState extends State<MyHomePage> {
         initialCameraPosition: _getInitialLocation(),
         markers: _createMarkers(),
         myLocationEnabled: true,
+        zoomGesturesEnabled: true,
+        zoomControlsEnabled: true,
       ),
     );
   }
