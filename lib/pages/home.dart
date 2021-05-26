@@ -2,6 +2,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttermap/components/map.dart';
+import 'package:fluttermap/services/notifications.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -50,33 +51,8 @@ class MyHomePageState extends State<MyHomePage> {
   }
 
   show() {
-    displayNotification("Parece que você está perto da Puc",
-        "Você pode passar na biblioteca e pegar um livro para leitura, que tal?");
-
-    AwesomeDialog(
-      context: context,
-      buttonsBorderRadius: BorderRadius.all(Radius.circular(4)),
-      borderSide: BorderSide(color: Colors.green, width: 2),
-      dialogType: DialogType.SUCCES,
-      animType: AnimType.TOPSLIDE,
-      headerAnimationLoop: false,
-      showCloseIcon: true,
-      title: 'UHUUUUU!!!',
-      desc:
-          'Você está em um campus da PUC, aproveite os benefícios de sua faculdade...',
-      btnOkOnPress: () {},
-    )..show();
-  }
-
-  Future<void> displayNotification(String title, String message) async {
-    var androidDetails = new AndroidNotificationDetails(
-        "channelId",
-        "Parece que você está perto da Puc",
-        "Você pode passar na biblioteca e pegar um livro para leitura, que tal?");
-
-    var details = new NotificationDetails(android: androidDetails);
-
-    await notificationsPlugin.show(0, title, message, details);
+    NotificationService.displayNotification(notificationsPlugin);
+    NotificationService.showDialog(context);
   }
 }
 
