@@ -57,6 +57,14 @@ class MapComponentState extends State<MapComponent> {
           LatLng(-19.859143126099053, -43.91881268492343)),
       _buildMarker("PUC_MINAS_PL", "PUC Minas - Praça da Liberdade",
           LatLng(-19.933722065812983, -43.93633613095481)),
+      _buildMarker("PUC_MINAS_BR", "PUC Minas - Barreiro",
+          LatLng(-19.976523364712037, -44.02588694432856)),
+      _buildMarker("PUC_MINAS_BE", "PUC Minas - Betim",
+          LatLng(-19.9550716, -44.1984331)),
+      _buildMarker("PUC_MINAS_CT", "PUC Minas - Contagem",
+          LatLng(-19.941460, -44.076420)),
+      _buildMarker("PUC_MINAS_PC", "PUC Minas - Poços de Caldas",
+          LatLng(-21.7992564, -46.6007147)),
     };
   }
 
