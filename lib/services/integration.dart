@@ -10,11 +10,7 @@ Future<ResultDTO> fetchData(double lat, double long) async {
   String queryString =
       "latitude=" + lat.toString() + "&longitude=" + long.toString();
 
-  String teste = "latitude=-19.93314955762107&longitude=-43.93706889593937";
-
-  print(GOOGLE_URL + queryString);
-
-  final response = await http.get(Uri.parse(GOOGLE_URL + teste));
+  final response = await http.get(Uri.parse(GOOGLE_URL + queryString));
 
   if (response.statusCode == 200) {
     return ResultDTO.fromJson(convert.jsonDecode(response.body));
