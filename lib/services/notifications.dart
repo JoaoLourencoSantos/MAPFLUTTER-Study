@@ -46,6 +46,7 @@ class NotificationService {
       showCloseIcon: true,
       title: title,
       desc: message,
+      autoHide: Duration(milliseconds: 20000),
       btnOkOnPress: () {},
     )..show();
   }

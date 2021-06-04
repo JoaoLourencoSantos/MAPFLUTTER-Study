@@ -1,4 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:fluttermap/models/ResultDTO.dart';
+import 'package:fluttermap/services/integration.dart';
+import 'package:fluttermap/services/notifications.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -33,15 +38,37 @@ class MapComponentState extends State<MapComponent> {
 
   Future<Position> _getPosition() async {
     return await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
+        desiredAccuracy: LocationAccuracy.lowest);
   }
 
   Future<CameraPosition> _getCurrentPosition() async {
     Position position = await _getPosition();
 
+    await showDialog(position);
+
     return CameraPosition(
         target: LatLng(position.latitude, position.longitude),
         zoom: _fixedZoom);
+  }
+
+  showDialog(Position position) async {
+    Geolocator.getPositionStream(
+            desiredAccuracy: LocationAccuracy.lowest,
+            distanceFilter: 4,
+            intervalDuration: Duration(milliseconds: 30000))
+        .listen((Position position) async {
+      ResultDTO result = await fetchData(position.latitude, position.longitude);
+
+      if (result.error) {
+        return;
+      }
+
+      if (!result.success) {
+        return;
+      }
+
+      NotificationService.showSuccesDialog(context, result.locale);
+    });
   }
 
   CameraPosition _getInitialLocation() {
@@ -56,7 +83,7 @@ class MapComponentState extends State<MapComponent> {
       _buildMarker("PUC_MINAS_SG", "PUC Minas - São Gabriel",
           LatLng(-19.859143126099053, -43.91881268492343)),
       _buildMarker("PUC_MINAS_PL", "PUC Minas - Praça da Liberdade",
-          LatLng(-19.933722065812983, -43.93633613095481)),
+          LatLng(-19.93265658845615, -43.93602367570194)),
       _buildMarker("PUC_MINAS_BR", "PUC Minas - Barreiro",
           LatLng(-19.976523364712037, -44.02588694432856)),
       _buildMarker("PUC_MINAS_BE", "PUC Minas - Betim",
